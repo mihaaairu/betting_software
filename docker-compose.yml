@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  db:
+    container_name: postgres_db
+    image: postgres:latest
+    env_file:
+      - .env
+    volumes:
+      - ./init_postgres/postgres_table.sql:/docker-entrypoint-initdb.d/postgres_table.sql
+      - postgres-data:/var/lib/postgresql/bet_maker
+    ports:
+      - "5432:5432"
+
+  app:
+    container_name: fast_api_service
+    build: ./app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+
+volumes:
+  postgres-data:

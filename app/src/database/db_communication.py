@@ -28,9 +28,9 @@ async def update_bets_states(database: Database, state: BetStateInput, event_id)
     return await database.execute(query)
 
 
-async def get_bets(database: Database) -> List[str]:
+async def get_bets(database: Database) -> List[BetOutput]:
     raw_data = await database.fetch_all(query=f"SELECT bet_id, state FROM bets")
-    return [BetOutput(**dict(row)).model_dump_json() for row in raw_data]
+    return [BetOutput(**dict(row)) for row in raw_data]
 
 
 async def check_event_exits(database: Database, event_id: str | int) -> Record | None:  # Just for UX
